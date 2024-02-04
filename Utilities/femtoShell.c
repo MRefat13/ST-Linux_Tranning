@@ -2,7 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #define MAX_SIZE (100)
-#define COMMAND_SIZE (50)
+#define COMMAND_SIZE (6)
 int main()
 {
 	char buf[MAX_SIZE], path[MAX_SIZE], *stateBuf;
@@ -11,15 +11,39 @@ int main()
 	while(1)
 	{
 		iterator = 0;
+		int i = 0;
 		printf("O2mor ya gameel >> ");
 		fgets(buf, MAX_SIZE ,stdin);
-		while( buf[iterator] != ' ' )
+		// Clrear the command buffer
+		for(i=0; i<COMMAND_SIZE; i++)
 		{
-			Command[iterator] = buf[iterator];
-			iterator++;
+			Command[i] = '\0';
 		}
 
-		if (strcmp(Command , "pwd\n") == 0 )
+		i=0;
+		
+		// Clear the Path buffer 
+                for(i=0; i<MAX_SIZE; i++)
+                {
+                        path[i] = '\0';
+                }
+
+                i=0;
+
+		// deal with case is the user inter a spaces pefore the command
+		while(buf[iterator] == ' '){
+			iterator++;
+		}
+		//Starting of reading the command
+		while( buf[iterator] != ' ' &&  buf[iterator] != '\n' )
+		{
+			Command[i] = buf[iterator];
+			iterator++;
+			i++;
+		}
+
+		i=0;
+		if (strcmp(Command , "pwd") == 0 )
                 {
 			 stateBuf = getcwd(buf, MAX_SIZE);
  			 if (stateBuf != NULL)
@@ -27,7 +51,7 @@ int main()
    				 printf (">>%s\n", buf);
 			  }
                 }
-                else if (strcmp(Command , "echo\n") == 0 )
+                else if (strcmp(Command , "echo") == 0 )
                 {
 			while(buf[iterator] != '\0')
 			{
@@ -35,25 +59,36 @@ int main()
 				iterator++;
 			}
                 }
-                else if (strcmp(Command , "cd\n") == 0 )
+                else if (strcmp(Command , "cd") == 0 )
                 {
-			int i=0;
-                        while(buf[iterator] != '\0')
+                        while(buf[iterator] != '\n')
                         {
                                 path[i] = buf[iterator];
                                 iterator++;
 				i++;
                         }
+			
+			// adding Null at the end of the path
+			path[i] = '\0';
+			printf("\n\npath  is %s\n",path);
+
                		 if ( chdir(path) != 0)
                		 {
                         	printf(">>invalid path\n");
                		 }
-			
+		
+		 	i=0;	 
                 }
-		else if (strcmp(Command , "exit\n") == 0 )
+		else if (strcmp(Command , "exit") == 0 )
 		{
 			printf(">>Goodbye\n");
 			break;
 		}
+		else 
+		{
+			printf(">>Enter a valid Command\n");
+		}
+
 	}
+
 }
