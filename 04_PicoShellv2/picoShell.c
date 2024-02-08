@@ -4,10 +4,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #define PATH_MAX (200)
 void parsing(char *pInput, char *arr_tokens[]);
 int getTokenNumber(char *cmd);
-void freeAllocatedMem(int myargc,char **myargv);
 
 int main()
 {
@@ -41,13 +43,38 @@ int main()
 
 	/*parse the input line */
 	parsing(cmd, arr_tokens);
+	
+	/*Check for the O/P redirection >*/
+	
+	/*
+	 * TO DO:
+	 *
+	for(iterator=0 ; iterator< tokensNum -1  ; iterator++)
+	{
 
+		if (strcmp(arr_tokens[iterator], ">") == 0) {
+			int fd = open (arr_tokens[iterator+1], O_WRONLY | O_CREAT| O_TRUNC, 0644);
+			if (fd > 0 )
+			{
+
+				int fd2 = dup2(fd,1);
+				if (fd2 < 0 )
+				{
+				 	printf("Failed to redirect output.\n");
+				}
+				close(fd);
+				break;
+				
+			}else
+			{
+				printf("Can not open of creat the redirection file\n");
+		
+			}
+
+		}
+	}
+	*/
 	if (strcmp(arr_tokens[0], "pwd\0") == 0) {
-	  
-
-
-
-
 	    char path[PATH_MAX];
 	    size_t size = PATH_MAX;
 	    if (getcwd(path, size) != NULL) {
@@ -87,7 +114,18 @@ int main()
 	}
 
 
-	freeAllocatedMem(tokensNum,arr_tokens);
+	/* free the array of the input arguments --> argv */
+        for(iterator=0 ; iterator< tokensNum  ; iterator++)
+        {	
+
+                free(arr_tokens[iterator]);
+		arr_tokens[iterator]=NULL;
+        }
+	/* free the array os the argument it self */
+	free(arr_tokens);
+	arr_tokens = NULL;
+
+	/* Free the CMD */
 	free(cmd);
 	cmd = NULL;
 	n = 0;
@@ -135,16 +173,4 @@ int getTokenNumber(char *cmd)
 
     }
     return cnt;
-}
-
-void freeAllocatedMem(int myargc,char **myargv)
-{
-	/* free the array of the input arguments --> argv */
-        for (int i = 0; i < myargc; i++) {
-            free(myargv[i]);
-            (myargv)[i] = NULL;
-        }
-        /* free the array os the argument it self */
-        free(myargv);
-	myargv = NULL;
 }
