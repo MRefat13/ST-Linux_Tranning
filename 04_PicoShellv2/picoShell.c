@@ -77,7 +77,9 @@ int main()
     int fd;
     char RedirFile_Flag = 0;
     int Output_Fd = 1; // STDOUT
-
+    /* this variable will be 1  when there is a o/p redirection
+     * this is mean the last argumet in the pasing command is a file  */ 
+    int LastArgumet = 0;	
     /*Handel O/P Redirection */
     if (arrow_poss != 0)
     {
@@ -96,6 +98,7 @@ int main()
     }
     if (RedirFile_Flag == 1)
     {
+      LastArgumet = 1;
       Output_Fd = fd;
     }
 
@@ -111,7 +114,7 @@ int main()
     else if (strcmp(myargv[0], "echo") == 0)
     {
       iterator = 1;
-      for (iterator = 1; iterator < myargc_new - 1; iterator++)
+      for (iterator = 1; iterator < myargc_new - LastArgumet; iterator++)
       {
         dprintf(Output_Fd, "%s ", myargv[iterator]);
       }
