@@ -33,5 +33,5 @@ The loop continues until the user enters the "exit" command, at which point the 
 ### `./picoShell`
 
 ## Example of the output:
-<img width="717" alt="image" src="https://github.com/MohamedRefat13/ST-Linux_Tranning/assets/93578161/5e74c7b7-ec95-4ab2-aa77-ad88cb48353d">
+file:///home/mohamedrefat/Pictures/Screenshots/Screenshot%20from%202024-02-19%2022-46-33.png![image](https://github.com/MohamedRefat13/ST-Linux_Tranning/assets/93578161/a7aa35bf-34c7-46ea-aa1e-14b4fae1bf6f)
 
